@@ -36,7 +36,7 @@ e.g.
  
   - Single Stream
   
-  $ ./deepstream-dewarper-app 3 1 file:///home/nvidia/sample_office.mp4 6
+  $ ./deepstream-dewarper-app 3 1 file:///home/nvidia/sample_office.mp4 6 one_config_dewarper.txt
 
   // Single Stream for Perspective Projection type (needs config file change)
   $ ./deepstream-dewarper-app 3 1 file:///home/nvidia/yoga.mp4 0
@@ -55,13 +55,9 @@ For more information on the general functionality and further examples see the
 DeepStream Plugin Development Guide.
 
 
-Three configuration files are provided:
-   . config_dewarper.txt (default): tailors the 360 camera multi-surface use-case
-   . config_dewarper_perspective.txt: single-surface Perspective Projection
-use-case. To use this you should rename this file to config_dewarper.txt or
-change the application code (line 278) to have a different input file name.
+10 configuration files are provided:
+   . under fisheye config files 8 config files are provided. Each config files here projects a fisheye camera to the other types of projections availble. 
 
-group.
 To change the number of surfaces in use change the property "num-batch-buffers".
 It should match the number of "surfaces" groups in the configuration file. So if
 you want two surfaces per buffer you should have "num-batch-buffers"=2 and two
@@ -89,10 +85,7 @@ Plugin Development Guide.
 --------------
 Common Fields
 --------------
-serial - Serial number for each Aisle or Spot View Camera Entry
-sensorId - Sensor ID String
-camDesc	- Camera Description String
-cameraIDString	- Camera ID String
+
 dewarpTopAngle - Top Field of View Angle, in degrees
 dewarpBottomAngle - Bottom Field of View Angle, in degrees
 dewarpPitch	- Viewing parameter Pitch, in degrees
