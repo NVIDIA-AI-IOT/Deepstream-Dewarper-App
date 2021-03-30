@@ -1,0 +1,105 @@
+################################################################################
+# Copyright (c) 2019, NVIDIA CORPORATION. All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+# DEALINGS IN THE SOFTWARE.
+################################################################################
+
+[property]
+#dewarp-dump-frames=10
+
+# aisle-calibration-file property is getting used in case of deepstream-360d-app,
+# if set below properties under group [surfaceX] will be ignored
+#aisle-calibration-file=csv_files/nvaisle_2M.csv
+# spot-calibration-file property is getting used in case of deepstream-360d-app,
+# if set below properties under group [surfaceX] will be ignored
+#spot-calibration-file=csv_files/nvspot_2M.csv
+
+#########################################
+# Note - Max 4 surfaces are supported
+#########################################
+
+num-batch-buffers=4
+[surface0]
+# 1=PushBroom, 2=VertRadCyl
+projection-type=5
+surface-index=0
+#dewarped surface parameters
+width=3800
+height=2900
+top-angle=90
+bottom-angle=-90
+pitch=0
+yaw=0
+roll=0
+focal-length=850
+rot-axes=2
+src-fov=180
+#control=1.0
+
+
+[surface1]
+# 1=PushBroom, 2=VertRadCyl
+projection-type=5
+surface-index=0
+#dewarped surface parameters
+width=3800
+height=2900
+top-angle=90
+bottom-angle=-90
+pitch=0
+yaw=0
+roll=90
+focal-length=850
+rot-axes=3
+src-fov=180
+control=1.0
+
+[surface2]
+# 1=PushBroom, 2=VertRadCyl
+projection-type=2
+surface-index=0
+#dewarped surface parameters
+width=3800
+height=2900
+top-angle=0
+bottom-angle=-45
+pitch=90
+yaw=160
+roll=0
+focal-length=850
+rot-axes=3
+src-fov=180
+control=1.0
+
+[surface3]
+# 1=PushBroom, 2=VertRadCyl
+projection-type=2
+surface-index=0
+#dewarped surface parameters
+width=3800
+height=3000
+top-angle=0
+bottom-angle=-60
+pitch=30
+yaw=45
+roll=20
+focal-length=552
+rot-axes=2
+src-fov=180
+control=1.0
