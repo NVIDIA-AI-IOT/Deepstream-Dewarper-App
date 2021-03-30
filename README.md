@@ -36,7 +36,7 @@ e.g.
  
   - Single Stream
   
-  $ ./deepstream-dewarper-app 3 1 file:///home/nvidia/sample_office.mp4 6
+  $ ./deepstream-dewarper-app 3 1 file:///home/nvidia/sample_office.mp4 6 one_config_dewarper.txt
 
   // Single Stream for Perspective Projection type (needs config file change)
   $ ./deepstream-dewarper-app 3 1 file:///home/nvidia/yoga.mp4 0
@@ -89,10 +89,7 @@ Plugin Development Guide.
 --------------
 Common Fields
 --------------
-serial - Serial number for each Aisle or Spot View Camera Entry
-sensorId - Sensor ID String
-camDesc	- Camera Description String
-cameraIDString	- Camera ID String
+
 dewarpTopAngle - Top Field of View Angle, in degrees
 dewarpBottomAngle - Bottom Field of View Angle, in degrees
 dewarpPitch	- Viewing parameter Pitch, in degrees
