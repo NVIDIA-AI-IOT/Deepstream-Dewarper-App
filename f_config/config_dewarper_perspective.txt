@@ -1,0 +1,51 @@
+################################################################################
+# Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+# DEALINGS IN THE SOFTWARE.
+################################################################################
+
+[property]
+#dewarp-dump-frames=10
+output-width=3680
+output-height=2428
+num-batch-buffers=1
+
+#########################################
+# Note - Max 4 surfaces are supported
+#########################################
+
+[surface0]
+# 1=PushBroom, 2=VertRadCyl, 3=PerspectivePerspective
+projection-type=3
+width=3680
+height=2428
+focal-length=1721.592
+#src-fov=180
+#top-angle=30
+#bottom-angle=-30
+distortion=-0.09787;0.00574;-0.00013;0;0
+src-x0=1861.88
+src-y0=1216.04
+# 0=cudaAddressModeClamp, 1=cudaAddressModeBorder
+#cuda-address-mode=0
+
+
+
+
+

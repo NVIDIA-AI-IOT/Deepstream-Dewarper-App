@@ -1,0 +1,49 @@
+##################################################################################
+# Copyright (c) 2018, NVIDIA CORPORATION. All rights reserved.
+#
+# NVIDIA Corporation and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA Corporation is strictly prohibited.
+#
+# tmake for SW Mobile component makefile
+#
+# deepstream-dewarper-test executable makefile fragment
+#
+##################################################################################
+
+ifdef NV_COMPONENT_FLAG_DYNAMIC_EXECUTABLE_SECTION
+include $(NV_BUILD_START_COMPONENT)
+
+NV_COMPONENT_NAME                  := deepstream-dewarper-app
+NV_COMPONENT_SOURCES               := \
+	deepstream_dewarper_test.c
+
+NV_COMPONENT_SYSTEMIMAGE_DIR := $(NV_SYSTEMIMAGE_DEEPSTREAM_DIR)
+
+NV_COMPONENT_CFLAGS := -DPLATFORM_TEGRA
+
+NV_COMPONENT_INCLUDES          += \
+	$(NV_SOURCE)/multimedia/utils/nvosd \
+	$(NV_SOURCE)/deepstream/sdk/include \
+	$(NV_SOURCE)/deepstream/sdk/src/gst-utils/gstnvdshelper \
+    
+
+NV_COMPONENT_NEEDED_INTERFACE_DIRS   += \
+        $(NV_SOURCE)/deepstream/sdk/src/utils/nvdsmeta \
+        $(NV_SOURCE)/deepstream/sdk/src/gst-utils/gst-nvdsmeta
+
+include $(NV_SOURCE)/tests-multimedia/nvgstapps/Makefile.common_gstreamer-1.0.tmk
+
+ifeq ($(NV_TARGET_ARCH),l4t_64)
+include $(NV_BUILD_DYNAMIC_EXECUTABLE)
+endif
+
+endif
+
+# Local Variables:
+# indent-tabs-mode: t
+# tab-width: 8
+# End:
+# vi: set tabstop=8 noexpandtab:
