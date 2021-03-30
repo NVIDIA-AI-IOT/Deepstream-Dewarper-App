@@ -55,13 +55,9 @@ For more information on the general functionality and further examples see the
 DeepStream Plugin Development Guide.
 
 
-Three configuration files are provided:
-   . config_dewarper.txt (default): tailors the 360 camera multi-surface use-case
-   . config_dewarper_perspective.txt: single-surface Perspective Projection
-use-case. To use this you should rename this file to config_dewarper.txt or
-change the application code (line 278) to have a different input file name.
+10 configuration files are provided:
+   . under fisheye config files 8 config files are provided. Each config files here projects a fisheye camera to the other types of projections availble. 
 
-group.
 To change the number of surfaces in use change the property "num-batch-buffers".
 It should match the number of "surfaces" groups in the configuration file. So if
 you want two surfaces per buffer you should have "num-batch-buffers"=2 and two
