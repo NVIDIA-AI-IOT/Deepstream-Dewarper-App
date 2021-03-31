@@ -26,6 +26,12 @@ apps.
 
 - Replace the libnvds_dewarper.so binary in /opt/nvidia/deepstream/deepstream-5.1/lib/ 
 with the binary provided in this repo under the plugin_libraries
+- Get the Tlt peoplenet model and label file. 
+   - wget https://api.ngc.nvidia.com/v2/models/nvidia/tlt_peoplenet/versions/pruned_v2.1/files/resnet34_peoplenet_pruned.etlt
+   - wget https://api.ngc.nvidia.com/v2/models/nvidia/tlt_peoplenet/versions/pruned_v2.1/files/labels.txt
+   The models described in this card detect one or more physical objects from three categories within an image and return a box around each object, as well as a category label   for each object. Three categories of objects detected by these models are – persons, bags and faces.
+   Please visit https://ngc.nvidia.com/catalog/models/nvidia:tlt_peoplenet for details. 
+
 
 Compilation Steps:
 
