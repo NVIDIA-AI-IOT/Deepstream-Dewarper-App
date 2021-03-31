@@ -1,43 +1,74 @@
 ################################################################################
-# Copyright (c) 2018, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2019-2020, NVIDIA CORPORATION. All rights reserved.
 #
-# NVIDIA Corporation and its licensors retain all intellectual property
-# and proprietary rights in and to this software, related documentation
-# and any modifications thereto.  Any use, reproduction, disclosure or
-# distribution of this software and related documentation without an express
-# license agreement from NVIDIA Corporation is strictly prohibited.
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
 #
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+# DEALINGS IN THE SOFTWARE.
 ################################################################################
 
-CC:= gcc
-TARGET_NAME:= deepstream-dewarper-app
+CUDA_VER?=11.1
+ifeq ($(CUDA_VER),)
+  $(error "CUDA_VER is not set")
+endif
 
-INSTALL_DIR:=/usr/bin
+APP:= deepstream-dewarper-app
 
-SRCS:= 	deepstream_dewarper_test.c
+TARGET_DEVICE = $(shell gcc -dumpmachine | cut -f1 -d -)
 
-INC_PATHS:= DS_SRC_ROOT_DIR/include \
-	    DS_SRC_ROOT_DIR/src/gst-utils/gstnvdshelper \
+NVDS_VERSION:=5.1
 
-CFLAGS+= -g -Wall -Werror
+LIB_INSTALL_DIR?=/opt/nvidia/deepstream/deepstream-$(NVDS_VERSION)/lib/
+APP_INSTALL_DIR?=/opt/nvidia/deepstream/deepstream-$(NVDS_VERSION)/bin/
 
-LIBS+= -lm \
-	-LDS_BUILD_ROOT_DIR/src/utils/nvdsmeta -lnvds_meta \
-  -LDS_BUILD_ROOT_DIR/src/gst-utils/gst-nvdsmeta -lnvdsgst_meta \
-	-LDS_BUILD_ROOT_DIR/src/gst-utils/gstnvdshelper -lnvdsgst_helper
+ifeq ($(TARGET_DEVICE),aarch64)
+  CFLAGS:= -DPLATFORM_TEGRA
+endif
 
-RELEASE_SRC_DIR_NAME:=apps/sample_apps/deepstream-dewarper-test
-RELEASE_SRC_FILES:= deepstream_dewarper_test.c=deepstream_dewarper_test.c \
-  Makefile.public=Makefile \
-  config_dewarper.txt=config_dewarper.txt \
-  config_dewarper_perspective.txt=config_dewarper_perspective.txt \
-  csv_files=csv_files \
-  README=README
+SRCS:= $(wildcard *.c)
 
-PACKAGE_BINARY_IN_DS:=1
-IS_APP:=1
-#APP_PKG_DIR:=sources/apps/sample_apps/deepstream-dewarper-test
+INCS:= $(wildcard *.h)
 
-NEEDS_GST:=1
+PKGS:= gstreamer-1.0
 
-include ../../../../Rules.mk
+OBJS:= $(SRCS:.c=.o)
+
+CFLAGS+= -I../../../includes \
+		-I /usr/local/cuda-$(CUDA_VER)/include
+
+CFLAGS+= $(shell pkg-config --cflags $(PKGS))
+
+LIBS:= $(shell pkg-config --libs $(PKGS))
+
+LIBS+= -L/usr/local/cuda-$(CUDA_VER)/lib64/ -lcudart \
+	   -L$(LIB_INSTALL_DIR) -lnvdsgst_meta -lnvds_meta -lnvdsgst_helper -lm \
+       -lcuda -Wl,-rpath,$(LIB_INSTALL_DIR)
+
+all: $(APP)
+
+%.o: %.c $(INCS) Makefile
+	$(CC) -c -o $@ $(CFLAGS) $<
+
+$(APP): $(OBJS) Makefile
+	$(CC) -o $(APP) $(OBJS) $(LIBS)
+
+install: $(APP)
+	cp -rv $(APP) $(APP_INSTALL_DIR)
+
+clean:
+	rm -rf $(OBJS) $(APP)
+
+
