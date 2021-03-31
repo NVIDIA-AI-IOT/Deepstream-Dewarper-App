@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright (c) 2019-2020, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2020, NVIDIA CORPORATION. All rights reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,55 +20,30 @@
 # DEALINGS IN THE SOFTWARE.
 ################################################################################
 
-CUDA_VER?=11.1
-ifeq ($(CUDA_VER),)
-  $(error "CUDA_VER is not set")
-endif
+[property]
+gpu-id=0
+net-scale-factor=0.0039215697906911373
+tlt-model-key=tlt_encode
+#tlt-encoded-model=../../models/tlt_pretrained_models/peoplenet/resnet34_peoplenet_pruned.etlt
+tlt-encoded-model=/home/ds_root/peoplenet/resnet34_peoplenet_pruned.etlt
+labelfile-path=/home/ds_root/peoplenet/labels_peoplenet.txt
+#model-engine-file=../../models/tlt_pretrained_models/peoplenet/resnet34_peoplenet_pruned.etlt_b1_gpu0_fp16.engine
+model-engine-file=/home/ds_root/peoplenet/resnet34_peoplenet_pruned.etlt_b1_gpu0_fp16.engine
+input-dims=3;544;960;0
+uff-input-blob-name=input_1
+batch-size=1
+process-mode=1
+model-color-format=0
+## 0=FP32, 1=INT8, 2=FP16 mode
+network-mode=2
+num-detected-classes=1
+cluster-mode=1
+interval=0
+gie-unique-id=1
+output-blob-names=output_bbox/BiasAdd;output_cov/Sigmoid
 
-APP:= deepstream-dewarper-app
-
-TARGET_DEVICE = $(shell gcc -dumpmachine | cut -f1 -d -)
-
-NVDS_VERSION:=5.1
-
-LIB_INSTALL_DIR?=/opt/nvidia/deepstream/deepstream-$(NVDS_VERSION)/lib/
-APP_INSTALL_DIR?=/opt/nvidia/deepstream/deepstream-$(NVDS_VERSION)/bin/
-
-ifeq ($(TARGET_DEVICE),aarch64)
-  CFLAGS:= -DPLATFORM_TEGRA
-endif
-
-SRCS:= $(wildcard *.c)
-
-INCS:= $(wildcard *.h)
-
-PKGS:= gstreamer-1.0
-
-OBJS:= $(SRCS:.c=.o)
-
-CFLAGS+= -I../../../../includes \
-		-I /usr/local/cuda-$(CUDA_VER)/include
-
-CFLAGS+= $(shell pkg-config --cflags $(PKGS))
-
-LIBS:= $(shell pkg-config --libs $(PKGS))
-
-LIBS+= -L/usr/local/cuda-$(CUDA_VER)/lib64/ -lcudart \
-	   -L$(LIB_INSTALL_DIR) -lnvdsgst_meta -lnvds_meta -lnvdsgst_helper -lm \
-       -lcuda -Wl,-rpath,$(LIB_INSTALL_DIR)
-
-all: $(APP)
-
-%.o: %.c $(INCS) Makefile
-	$(CC) -c -o $@ $(CFLAGS) $<
-
-$(APP): $(OBJS) Makefile
-	$(CC) -o $(APP) $(OBJS) $(LIBS)
-
-install: $(APP)
-	cp -rv $(APP) $(APP_INSTALL_DIR)
-
-clean:
-	rm -rf $(OBJS) $(APP)
-
-
+[class-attrs-all]
+pre-cluster-threshold=0.4
+## Set eps=0.7 and minBoxes for cluster-mode=1(DBSCAN)
+eps=0.7
+minBoxes=1

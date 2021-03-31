@@ -732,7 +732,7 @@ main (int argc, char *argv[])
   }
 
   g_object_set (G_OBJECT (nvinfer), 
-    "config-file-path", "./config_infer_primary_peoplenet.txt",
+    "config-file-path", "./inference_files/config_infer_primary_peoplenet.txt",
     NULL);
 
   /* Use nvtiler to composite the batched frames into a 2D tiled array based
@@ -804,7 +804,7 @@ main (int argc, char *argv[])
       "width", TILED_OUTPUT_WIDTH, "height", TILED_OUTPUT_HEIGHT, NULL);
 
   char name[300];
-  snprintf(name, 300, "dstest_tracker_config.txt");
+  snprintf(name, 300, "/tracker_files/dstest_tracker_config.txt");
   if(!set_tracker_properties(tracker, name)){
 	  g_printerr("Failed to set tracker properties. Exiting.\n");
 	  return -1; 
