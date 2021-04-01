@@ -2,6 +2,8 @@
 
 ![](images/fisheye_panini.JPG)
 
+![](images/dewarp_with_inference.JPG)
+
 This project demonstrate how to infer and track from a 360 videos by using the dewarper plugin. 
 Dewarping the 360 videos helps to have better inference and tracking accuracy. 
 It also includes a dynamic library libnvdsgst_dewarper.so which has more projection types than the libnvdsgst_dewarper.so file in the DeepStream 5.1 
