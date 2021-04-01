@@ -26,10 +26,6 @@ apps.
    sudo apt-get install libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev \
    libgstrtspserver-1.0-dev libx11-dev
 
-- Replace the libnvds_dewarper.so binary in /opt/nvidia/deepstream/deepstream-5.1/lib/ 
-with the binary provided in this repo under the plugin_libraries
-
-
 ## Getting started:
 
    1. Install [Deepstream 5.1](https://developer.nvidia.com/deepstream-sdk) on your platform, verify it is working by running deepstream-app.
