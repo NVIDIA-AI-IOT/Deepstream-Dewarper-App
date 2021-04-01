@@ -71,12 +71,6 @@ DeepStream Plugin Development Guide.
 Dewarping configuration files are provided in [dewarper_config_files](dewarper_config_files/) directory :
    - Example parameters for dewarping fisheye camera/video are given in these config files. You can play with these parameters to get your desired dewarped surface.
    - Details explaining these parameters are given below in this file.. 
-   
-To change the number of surfaces in use change the property "num-batch-buffers".
-It should match the number of "surfaces" groups in the configuration file. So if
-you want two surfaces per buffer you should have "num-batch-buffers"=2 and two
-surfaces groups ([surface0] and [surface1]). Default value is 4.
-
 
 Parameters:
 uri - represents the input video stream
