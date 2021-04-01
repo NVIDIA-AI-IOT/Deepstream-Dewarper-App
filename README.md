@@ -26,7 +26,7 @@ apps.
 
 - Replace the libnvds_dewarper.so binary in /opt/nvidia/deepstream/deepstream-5.1/lib/ 
 with the binary provided in this repo under the plugin_libraries
-- Get the Tlt peoplenet model and label file. 
+- Get the Tlt peoplenet model and label file. Download these files under [inference_files](inference_files/) directory. 
    - wget https://api.ngc.nvidia.com/v2/models/nvidia/tlt_peoplenet/versions/pruned_v2.1/files/resnet34_peoplenet_pruned.etlt
    - wget https://api.ngc.nvidia.com/v2/models/nvidia/tlt_peoplenet/versions/pruned_v2.1/files/labels.txt
    The models described in this card detect one or more physical objects from three categories within an image and return a box around each object, as well as a category label   for each object. Three categories of objects detected by these models are – persons, bags and faces.
@@ -63,9 +63,10 @@ For more information on the general functionality and further examples see the
 DeepStream Plugin Development Guide.
 
 
-10 configuration files are provided:
-   . under fisheye config files 8 config files are provided. Each config files here projects a fisheye camera to the other types of projections availble. 
-
+Dewarping configuration files are provided in [dewarper_config_files](dewarper_config_files/) directory :
+   - Example parameters for dewarping fisheye camera/video are given in these config files. You can play with these parameters to get your desired dewarped surface.
+   - Details explaining these parameters are given below in this file.. 
+   
 To change the number of surfaces in use change the property "num-batch-buffers".
 It should match the number of "surfaces" groups in the configuration file. So if
 you want two surfaces per buffer you should have "num-batch-buffers"=2 and two
