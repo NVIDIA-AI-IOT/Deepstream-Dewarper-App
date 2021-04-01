@@ -114,6 +114,7 @@ Please refer to [GST-NVDEWARPER configuration file parameters](https://docs.nvid
 - focal length	- Focal Lenght of camera lens, in pixels per radian
 - width	- dewarped surface width
 - height - dewarped surface height
+- num-batch-buffers - To change the number of surfaces. It should match the number of "surfaces" groups in the configuration file. So if you want two surfaces per buffer you    should have "num-batch-buffers"=2 and two surfaces groups ([surface0] and [surface1]). Default value is 4.
 
 
  
