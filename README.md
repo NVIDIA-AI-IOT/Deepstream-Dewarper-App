@@ -53,7 +53,7 @@ apps.
       - // Single Stream for Perspective Projection type (needs config file change)
       - $ ./deepstream-dewarper-app 3 1 file:///home/nvidia/yoga.mp4 0
       - Multi Stream
-      - $ ./deepstream-dewarper-app 3 1 file:///home/nvidia/sample_cam6.mp4 6 file:///home/nvidia/sample_cam6.mp4 6
+      - $ ./deepstream-dewarper-app 3 1 file:///home/nvidia/sample_cam6.mp4 6 one_config_dewarper.txt file:///home/nvidia/sample_cam6.mp4 6 one_config_dewarper.txt
 
     
  
