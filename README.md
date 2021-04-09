@@ -89,7 +89,7 @@ Plugin Development Guide.
 -------------------------------
 
 --------------
-Common Fields
+Common Fields/Parameters
 --------------
 Please refer to [GST-NVDEWARPER configuration file parameters](https://docs.nvidia.com/metropolis/deepstream/5.0DP/plugin-manual/index.html#page/DeepStream%20Plugins%20Development%20Guide/deepstream_plugin_details.3.08.html) for details. 
 
