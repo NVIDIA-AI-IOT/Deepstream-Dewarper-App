@@ -50,7 +50,7 @@ apps.
       - $ make
       - $ ./deepstream-dewarper-app [1:file sink|2: fakesink|3:display sink] [1:without tracking| 2: with tracking] [<uri1> <camera_id1> <config_file1>] [<uri2> <camera_id2> <config_file2>] ... [<uriN> <camera_idN> <config_fileN>]
       - Single Stream
-      - $ ./deepstream-dewarper-app 3 1 file:///home/nvidia/sample_office.mp4 6 one_config_dewarper.txt
+      - $ ./deepstream-dewarper-app 3 1 file:///home/nvidia/sample_office.mp4 6 one_config_dewarper.txt (to display)
       - // Single Stream for Perspective Projection type (needs config file change)
       - $ ./deepstream-dewarper-app 3 1 file:///home/nvidia/yoga.mp4 0
       - Multi Stream
