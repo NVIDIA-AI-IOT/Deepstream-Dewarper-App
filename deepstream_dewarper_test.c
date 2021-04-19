@@ -882,7 +882,7 @@ main (int argc, char *argv[])
 		    return -1;
       }
 	  } else {
-      g_printerr ("Tracking option can only be 1 or 2"\n);
+      g_printerr ("Tracking option can only be 1 or 2\n");
       g_printerr ("Usage: %s [1:file sink|2: fakesink|3:display sink] [1:without tracking| 2:with tracking] <uri1> <source id1> [<uri2> <source id2>] ... [<uriN> <source idN>]\n", argv[0]);
       return -1;
    } 
