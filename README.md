@@ -34,7 +34,6 @@ apps.
       
       $ git clone https://github.com/NVIDIA-AI-IOT/Deepstream-Dewarper-App.git 
    3. Replace old dewarper plugin binary with the new binary that includes 15 more projection types. Note: keep the old ones incase you want to revert back and use them 
-      - Replace the libnvds_dewarper.so binary in /opt/nvidia/deepstream/deepstream-5.1/lib/ with the binary provided in this repo under the plugin_libraries
       - Replace the libnvdgst_dewarper.so binary in /opt/nvidia/deepstream/deepstream-5.1/lib/gst-plugins/ with the binary provided in this repo under the plugin_libraries
       - Replace the nvds_dewarper_meta.h file in /opt/nvidia/deepstream/deepstream-5.1/source/includes/ 
       - note: We currently have these libraries supported only for x86. Jetson libraries should be there soon. 
