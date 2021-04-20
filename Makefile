@@ -20,7 +20,7 @@
 # DEALINGS IN THE SOFTWARE.
 ################################################################################
 
-CUDA_VER?=11.1
+CUDA_VER?=10.2
 ifeq ($(CUDA_VER),)
   $(error "CUDA_VER is not set")
 endif
@@ -46,7 +46,7 @@ PKGS:= gstreamer-1.0
 
 OBJS:= $(SRCS:.c=.o)
 
-CFLAGS+= -I../../../../includes \
+CFLAGS+= -I../../../includes \
 		-I /usr/local/cuda-$(CUDA_VER)/include
 
 CFLAGS+= $(shell pkg-config --cflags $(PKGS))

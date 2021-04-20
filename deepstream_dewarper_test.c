@@ -731,9 +731,15 @@ main (int argc, char *argv[])
     g_printerr ("Failed to create nvdewarper element. Exiting.\n");
     return -1;
   }
-  
+  /*g_object_set (G_OBJECT (nvinfer), 
+    "tlt-encode-model", "/opt/nvidia/deepstream/deepstream-5.1/sources/apps/sample_apps/Deepstream-Dewarper-App/inference_files/resnet34_peoplenet_pruned.etlt", 
+    NULL);*/
+  //g_object_set (G_OBJECT (nvinfer), 
+  //  "model-engine-file", "/opt/nvidia/deepstream/deepstream-5.1/sources/apps/sample_apps/Deepstream-Dewarper-App/inference_files/resnet34_peoplenet_pruned.etlt_b1_gpu0_fp16.engine", 
+  //  NULL);
   g_object_set (G_OBJECT (nvinfer), 
-    "config-file-path", "inference_files/config_infer_primary_peoplenet.txt", 
+    "config-file-path", "config_infer_primary_peoplenet.txt", 
+    //"config-file-path", "/opt/nvidia/deepstream/deepstream-5.1/sources/apps/sample_apps/Deepstream-Dewarper-App/config_infer_primary_peoplenet.txt",
     NULL);
 
   /* Use nvtiler to composite the batched frames into a 2D tiled array based
@@ -839,14 +845,14 @@ main (int argc, char *argv[])
   if(atoi(argv[1]) == 1){
     g_object_set (G_OBJECT (sink), "location", "out.h264", NULL);
 
-	  gst_bin_add_many (GST_BIN (pipeline), nvvidconv1, nvh264enc, capfilt, queue1, queue2, tracker, NULL);
+	  gst_bin_add_many (GST_BIN (pipeline), nvvidconv1, nvh264enc, capfilt, queue1, queue2, NULL);
     if (atoi(argv[2]) == 1){ 
 	    if (!gst_element_link_many (streammux, nvinfer,  tiler, nvosd,  queue1, nvvidconv1, capfilt, queue2, nvh264enc, sink, NULL)){
 		    g_printerr ("OSD and sink elements link failure.\n");
 		    return -1;
       }
     } else if (atoi(argv[2]) == 2) {
-      if (!gst_element_link_many (streammux,  tiler, queue1, nvvidconv1, capfilt, queue2, nvh264enc, sink, NULL)){//nvinfer, tracker , tiler, nvosd, 
+      if (!gst_element_link_many (streammux, queue1, nvinfer, tiler,  nvvidconv1, capfilt, queue2, nvh264enc, sink, NULL)){//nvinfer, tracker , tiler, nvosd, 
 		    g_printerr ("OSD and sink elements link failure.\n");
 		    return -1;
       }
@@ -872,7 +878,7 @@ main (int argc, char *argv[])
 	  gst_bin_add_many (GST_BIN (pipeline), transform,  NULL);
      
     if (atoi(argv[2]) == 1){ 
-	    if (!gst_element_link_many (streammux, nvinfer,  tiler, nvosd,  transform, sink, NULL)){
+	    if (!gst_element_link_many (streammux, nvinfer,  tiler, nvosd, transform, sink, NULL)){ 
 		    g_printerr ("OSD and sink elements link failure.\n");
 		    return -1;
       }
@@ -882,7 +888,7 @@ main (int argc, char *argv[])
 		    return -1;
       }
 	  } else {
-      g_printerr ("Tracking option can only be 1 or 2"\n);
+      g_printerr ("Tracking option can only be 1 or 2\n");
       g_printerr ("Usage: %s [1:file sink|2: fakesink|3:display sink] [1:without tracking| 2:with tracking] <uri1> <source id1> [<uri2> <source id2>] ... [<uriN> <source idN>]\n", argv[0]);
       return -1;
    } 
