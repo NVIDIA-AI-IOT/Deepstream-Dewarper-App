@@ -36,7 +36,7 @@ apps.
    3. Replace old dewarper plugin binary with the new binary that includes 15 more projection types. Note: keep the old ones incase you want to revert back and use them 
       - Replace the libnvdgst_dewarper.so binary in /opt/nvidia/deepstream/deepstream-5.1/lib/gst-plugins/ with the binary provided in this repo under the plugin_libraries
       - Replace the nvds_dewarper_meta.h file in /opt/nvidia/deepstream/deepstream-5.1/source/includes/ 
-      - note: We currently have these libraries supported only for x86. Jetson libraries should be there soon. 
+      - note:Jetson library is included [here](https://github.com/NVIDIA-AI-IOT/Deepstream-Dewarper-App/tree/main/plugin_libraries/jetson_bin) now
       
    4. Get the Tlt peoplenet model and label file. Download these files under [inference_files](inference_files/) directory. 
       - $ wget https://api.ngc.nvidia.com/v2/models/nvidia/tlt_peoplenet/versions/pruned_v2.1/files/resnet34_peoplenet_pruned.etlt
