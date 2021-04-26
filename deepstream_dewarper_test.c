@@ -731,16 +731,8 @@ main (int argc, char *argv[])
     g_printerr ("Failed to create nvdewarper element. Exiting.\n");
     return -1;
   }
-  /*g_object_set (G_OBJECT (nvinfer), 
-    "tlt-encode-model", "/opt/nvidia/deepstream/deepstream-5.1/sources/apps/sample_apps/Deepstream-Dewarper-App/inference_files/resnet34_peoplenet_pruned.etlt", 
-    NULL);*/
-  //g_object_set (G_OBJECT (nvinfer), 
-  //  "model-engine-file", "/opt/nvidia/deepstream/deepstream-5.1/sources/apps/sample_apps/Deepstream-Dewarper-App/inference_files/resnet34_peoplenet_pruned.etlt_b1_gpu0_fp16.engine", 
-  //  NULL);
   g_object_set (G_OBJECT (nvinfer), 
-    "config-file-path", "config_infer_primary_peoplenet.txt", 
-    //"config-file-path", "/opt/nvidia/deepstream/deepstream-5.1/sources/apps/sample_apps/Deepstream-Dewarper-App/config_infer_primary_peoplenet.txt",
-    NULL);
+    "config-file-path", "inference_files/config_infer_primary_peoplenet.txt", NULL);
 
   /* Use nvtiler to composite the batched frames into a 2D tiled array based
    * on the source of the frames. */
