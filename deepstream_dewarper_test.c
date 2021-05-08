@@ -355,112 +355,7 @@ create_source_bin (guint index, gchar * uri)
 
 
 
-/* osd_sink_pad_buffer_probe  will extract metadata received on OSD sink pad
- * and dump bounding box data to a file. */
 
-static GstPadProbeReturn
-osd_sink_pad_buffer_probe (GstPad * pad, GstPadProbeInfo * info,
-    gpointer u_data)
-{
-  GstBuffer *buf = (GstBuffer *) info->data;
-  NvDsFrameMeta *frame_meta = NULL;
-  guint person_count = 0;
-  guint bag_count = 0;
-  guint face_count = 0;
-  
-  NvDsMetaList *l_frame, *l_obj;
-
-  gchar bbox_file[1024] = { 0 };
-  FILE *bbox_params_dump_file = NULL;
-  GstClockTime now;
-  perf_measure * perf = (perf_measure *)(u_data);
-  
-  
-  NvDsBatchMeta *batch_meta = gst_buffer_get_nvds_batch_meta (buf);
-  
-  
-  now = g_get_monotonic_time();
-
-  if (perf->pre_time == GST_CLOCK_TIME_NONE) {
-    perf->pre_time = now;
-    perf->total_time = GST_CLOCK_TIME_NONE;
-  } else {
-    if (perf->total_time == GST_CLOCK_TIME_NONE) {
-      perf->total_time = (now - perf->pre_time);
-    } else {
-      perf->total_time += (now - perf->pre_time);
-    }
-    perf->pre_time = now;
-    perf->count++;
-  }
-
-
-  if (!batch_meta) {
-    // No batch meta attached.
-    return GST_PAD_PROBE_OK;
-  }
-  
-  gchar kitti_track_dir_path[50] = "/home/ds_root/peoplenet/saved_metadata/";
-  //NvDsFrameMeta *frame_meta = l_frame->data;
-  //guint stream_id = frame_meta->pad_index;
-  g_snprintf (bbox_file, sizeof (bbox_file) - 1,
-      "%stracker_working_data1.txt", kitti_track_dir_path);
-  bbox_params_dump_file = fopen (bbox_file, "a");
-  //if (!bbox_params_dump_file)
-    //continue;
-   
-
-  for (l_frame = batch_meta->frame_meta_list; l_frame; l_frame = l_frame->next) {
-    frame_meta = (NvDsFrameMeta *) l_frame->data;
-
-    if (frame_meta == NULL) {
-      // Ignore Null frame meta.
-      continue;
-    }
-    
-
-    for (l_obj = frame_meta->obj_meta_list; l_obj; l_obj = l_obj->next) {
-      NvDsObjectMeta *obj_meta = (NvDsObjectMeta *) l_obj->data;
-
-      if (obj_meta == NULL) {
-        // Ignore Null object.
-        continue;
-      }
-
-     
-      if (obj_meta->class_id == PGIE_CLASS_ID_PERSON)
-        person_count++;
-      if (obj_meta->class_id == PGIE_CLASS_ID_BAG)
-        bag_count++;
-      if (obj_meta->class_id == PGIE_CLASS_ID_FACE)
-        face_count++;
-
-     
-      
-      float top = obj_meta->rect_params.top;
-      float left = obj_meta->rect_params.left;
-      float right = left + obj_meta->rect_params.width;
-      float bottom = top + obj_meta->rect_params.height;
-      float confidence = obj_meta->confidence;
-      guint64 id = obj_meta->object_id;
-      fprintf (bbox_params_dump_file,
-          "%s %lu 0.0 0 0.0 %f %f %f %f 0.0 0.0 0.0 0.0 0.0 0.0 0.0 %f\n",
-          obj_meta->obj_label, id, left, top, right, bottom, confidence);
-      
-    }
-        
-    
-  }
-  
-  fprintf (bbox_params_dump_file,"Frame Number = %d People Count = %d Bag Count = %d Face Count = %d \n", frame_number, person_count, bag_count, face_count);
-  g_print ("Frame Number = %d People Count = %d Bag Count = %d Face Count = %d \n",
-      frame_number, person_count, bag_count, face_count);
-  frame_number++;
-  fclose (bbox_params_dump_file);
-  
-
-  return GST_PAD_PROBE_OK;
-}
 
 /* osd_sink_pad_buffer_probe  will extract metadata received on OSD sink pad
  * and dump bounding box data with tracking id added to a file*/
@@ -731,8 +626,16 @@ main (int argc, char *argv[])
     g_printerr ("Failed to create nvdewarper element. Exiting.\n");
     return -1;
   }
+  /*g_object_set (G_OBJECT (nvinfer), 
+    "tlt-encode-model", "/opt/nvidia/deepstream/deepstream-5.1/sources/apps/sample_apps/Deepstream-Dewarper-App/inference_files/resnet34_peoplenet_pruned.etlt", 
+    NULL);*/
+  //g_object_set (G_OBJECT (nvinfer), 
+  //  "model-engine-file", "/opt/nvidia/deepstream/deepstream-5.1/sources/apps/sample_apps/Deepstream-Dewarper-App/inference_files/resnet34_peoplenet_pruned.etlt_b1_gpu0_fp16.engine", 
+  //  NULL);
   g_object_set (G_OBJECT (nvinfer), 
-    "config-file-path", "inference_files/config_infer_primary_peoplenet.txt", NULL);
+    "config-file-path", "inference_files/config_infer_primary_peoplenet.txt", 
+    //"config-file-path", "/opt/nvidia/deepstream/deepstream-5.1/sources/apps/sample_apps/Deepstream-Dewarper-App/config_infer_primary_peoplenet.txt",
+    NULL);
 
   /* Use nvtiler to composite the batched frames into a 2D tiled array based
    * on the source of the frames. */
@@ -844,7 +747,7 @@ main (int argc, char *argv[])
 		    return -1;
       }
     } else if (atoi(argv[2]) == 2) {
-      if (!gst_element_link_many (streammux, queue1, nvinfer, tiler,  nvvidconv1, capfilt, queue2, nvh264enc, sink, NULL)){//nvinfer, tracker , tiler, nvosd, 
+      if (!gst_element_link_many (streammux, queue1, nvinfer, tracker, tiler,  nvosd, nvvidconv1, capfilt, queue2, nvh264enc, sink, NULL)){//nvinfer, tracker , tiler, nvosd, 
 		    g_printerr ("OSD and sink elements link failure.\n");
 		    return -1;
       }
@@ -867,15 +770,15 @@ main (int argc, char *argv[])
 	 
   }else if (atoi(argv[1]) == 3){
 #ifdef PLATFORM_TEGRA
-	  gst_bin_add_many (GST_BIN (pipeline), transform,  NULL);
+	  gst_bin_add_many (GST_BIN (pipeline), queue1, queue2, transform, nvvidconv1, capfilt,  NULL);
      
     if (atoi(argv[2]) == 1){ 
-	    if (!gst_element_link_many (streammux, nvinfer,  tiler, nvosd, transform, sink, NULL)){ 
+	    if (!gst_element_link_many (streammux,  queue1, nvinfer, tiler, nvosd, queue2, nvvidconv1, capfilt, transform, sink, NULL)){ 
 		    g_printerr ("OSD and sink elements link failure.\n");
 		    return -1;
       }
     } else if (atoi(argv[2]) == 2) {
-      if (!gst_element_link_many (streammux, nvinfer,  tracker, tiler,  nvosd,  transform, sink, NULL)){
+      if (!gst_element_link_many (streammux,  queue1, nvinfer,  tracker, tiler,  nvosd, queue2, nvvidconv1, capfilt, transform, sink, NULL)){
 		    g_printerr ("OSD and sink elements link failure.\n");
 		    return -1;
       }
@@ -915,7 +818,7 @@ main (int argc, char *argv[])
     g_print ("Unable to get sink pad\n");
   else if (atoi(argv[2]) == 1)
     gst_pad_add_probe (osd_sink_pad, GST_PAD_PROBE_TYPE_BUFFER,
-        osd_sink_pad_buffer_probe, NULL, NULL);
+        osd_sink_pad_buffer_probe_tracking, &perf_measure, NULL);
   else if (atoi(argv[2]) == 2)
     gst_pad_add_probe (osd_sink_pad, GST_PAD_PROBE_TYPE_BUFFER,
         osd_sink_pad_buffer_probe_tracking, &perf_measure, NULL);
